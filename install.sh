@@ -35,7 +35,7 @@ echo "[5/6] Setting up EULA..."
 echo "eula=true" > server/eula.txt
 
 # Step 6: Download Playit.gg agent
-PLAYIT_DOWNLOAD_URL="https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-arm64"
+PLAYIT_DOWNLOAD_URL="https://github.com/playit-cloud/playit-agent/releases/download/v0.16.2/playit-linux-aarch64"
 PLAYIT_BIN="playit/playit"
 if [ ! -f "$PLAYIT_BIN" ]; then
     echo "[6/6] Downloading Playit.gg agent..."
