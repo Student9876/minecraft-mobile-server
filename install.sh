@@ -45,17 +45,13 @@ else
     echo "[6/6] Playit.gg agent already exists. Skipping download."
 fi
 
-# Ask for Playit.gg token
-echo ""
-echo "=================================================="
-echo "  Go to https://playit.gg to create a free account"
-echo "  Then click 'Download Agent', copy your claim token"
-echo "=================================================="
-read -p "Enter your Playit.gg claim token: " PLAYIT_TOKEN
-
-# Save token to config file
-echo "{ \"claim_token\": \"$PLAYIT_TOKEN\" }" > playit/playit_config.json
-
 echo ""
 echo "=== Installation Complete ==="
-echo "Run './start.sh' to launch your Minecraft server."
+echo "Now starting Playit.gg to get your claim token and tunnel URL..."
+echo "==============================================================="
+echo "NOTE: Copy the URL shown below and open it in your browser to claim."
+echo "==============================================================="
+sleep 2
+
+# Run Playit so it shows URL and lets user claim
+"$PLAYIT_BIN"
