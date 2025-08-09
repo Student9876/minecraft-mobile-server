@@ -9,7 +9,7 @@ cd ~
 # Step 2: Clone repo into safe location
 if [ ! -d "$HOME/minecraft-termux" ]; then
     echo "Cloning repository..."
-    git clone https://github.com/your-repo/minecraft-termux.git
+    git clone https://github.com/Student9876/minecraft-mobile-server.git
 fi
 cd minecraft-termux
 
