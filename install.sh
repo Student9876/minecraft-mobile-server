@@ -45,7 +45,7 @@ case "$ARCH" in
   x86_64)        PLAYIT_ASSET="playit-linux-x86_64" ;;
   *)             PLAYIT_ASSET="playit-linux-arm64" ;;
 esac
-PLAYIT_BIN="$HOME/minecraft-termux/playit/playit"
+PLAYIT_BIN="$HOME/minecraft-termux/playit"
 PLAYIT_URL="https://github.com/playit-cloud/playit-agent/releases/latest/download/${PLAYIT_ASSET}"
 
 echo "Detected arch: $ARCH -> will try asset: $PLAYIT_ASSET"
