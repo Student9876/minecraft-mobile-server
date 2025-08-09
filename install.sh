@@ -43,6 +43,7 @@ if [ ! -f "$PLAYIT_BIN" ]; then
     chmod +x "$PLAYIT_BIN"
 else
     echo "[6/6] Playit.gg agent already exists. Skipping download."
+    chmod +x "$PLAYIT_BIN"  # Ensure it's executable
 fi
 
 echo ""
@@ -51,7 +52,6 @@ echo "Now starting Playit.gg to get your claim token and tunnel URL..."
 echo "==============================================================="
 echo "NOTE: Copy the URL shown below and open it in your browser to claim."
 echo "==============================================================="
-sleep 2
 
-# Run Playit so it shows URL and lets user claim
-"$PLAYIT_BIN"
+# Run Playit agent to display claim token URL
+./"$PLAYIT_BIN"
