@@ -21,7 +21,8 @@ echo "[3/6] Creating project folders..."
 mkdir -p server worlds playit
 
 # Step 4: Download Vanilla 1.21.1 server jar from Mojang
-SERVER_JAR_URL="https://piston-data.mojang.com/v1/objects/c9ad8fa9e8aabc3919f309d854601df7cfccba54/server.jar"
+SERVER_JAR_URL="https://piston-data.mojang.com/v1/objects/45810d238246d90e811d896f87b14695b7fb6839/server.jar"
+
 if [ ! -f server/server.jar ]; then
     echo "[4/6] Downloading Minecraft 1.21.1 server jar..."
     wget -O server/server.jar "$SERVER_JAR_URL"
