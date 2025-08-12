@@ -1,36 +1,42 @@
 #!/bin/bash
+
 set -e
 
-SERVER_DIR="/root/mc-server"
-SERVER_JAR="$SERVER_DIR/server.jar"
-WORLD_DIR="$SERVER_DIR/worlds"
+JAR_FILE="server.jar"
+WORLD_DIR="worlds"
 
-cd "$SERVER_DIR"
-
-echo "============================="
-echo "  Minecraft Server Launcher  "
-echo "      Vanilla 1.21.1         "
-echo "============================="
+echo "=== Minecraft Server Launcher ==="
 echo "1) Load existing world"
 echo "2) Create new world"
-read -p "Choose an option [1-2]: " choice
+echo "3) Exit"
+read -p "Choose an option: " choice
 
-if [ "$choice" == "1" ]; then
-    echo "Available worlds:"
-    ls -1 "$WORLD_DIR"
-    read -p "Enter world name: " worldname
-    if [ ! -d "$WORLD_DIR/$worldname" ]; then
-        echo "[!] World not found. Exiting."
+case "$choice" in
+    1)
+        if [ ! -d "$WORLD_DIR" ]; then
+            echo "No existing world found! Please create one first."
+            exit 1
+        fi
+        echo "Starting server with existing world..."
+        java -Xmx1024M -Xms1024M -jar "$JAR_FILE" nogui
+        ;;
+    2)
+        read -p "Enter new world name: " new_world
+        if [ -z "$new_world" ]; then
+            echo "World name cannot be empty!"
+            exit 1
+        fi
+        echo "Creating new world '$new_world'..."
+        rm -rf "$WORLD_DIR"
+        mkdir "$WORLD_DIR"
+        java -Xmx1024M -Xms1024M -jar "$JAR_FILE" nogui
+        ;;
+    3)
+        echo "Exiting."
+        exit 0
+        ;;
+    *)
+        echo "Invalid choice."
         exit 1
-    fi
-    java -Xmx1G -Xms1G -jar "$SERVER_JAR" nogui --world "$WORLD_DIR/$worldname"
-
-elif [ "$choice" == "2" ]; then
-    read -p "Enter new world name: " worldname
-    mkdir -p "$WORLD_DIR/$worldname"
-    java -Xmx1G -Xms1G -jar "$SERVER_JAR" nogui --world "$WORLD_DIR/$worldname"
-
-else
-    echo "[!] Invalid option."
-    exit 1
-fi
+        ;;
+esac

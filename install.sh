@@ -1,30 +1,21 @@
 #!/bin/bash
+
 set -e
 
-echo "[*] Updating packages..."
-apt update -y && apt upgrade -y
+echo "=== Minecraft Vanilla 1.21.1 Server Setup ==="
 
-echo "[*] Installing dependencies..."
-apt install -y openjdk-21-jdk wget unzip screen
+# Install dependencies
+echo "[1/3] Installing dependencies..."
+apt update
+apt install -y openjdk-21-jre-headless wget
 
-# Create project folder
-mkdir -p /root/mc-server
-cd /root/mc-server
-
-# Download Vanilla 1.21.1 server jar
-SERVER_JAR="server.jar"
-if [ ! -f "$SERVER_JAR" ]; then
-    echo "[*] Downloading Minecraft Vanilla 1.21.1..."
-    wget -O "$SERVER_JAR" https://piston-data.mojang.com/v1/objects/ea1e2d342774e6a8f3e3f3af18e8a50182c5cc75/server.jar
-fi
+# Download server jar
+echo "[2/3] Downloading Minecraft server (1.21.1)..."
+wget -O server.jar "https://piston-data.mojang.com/v1/objects/f3e503a630e3ff92c1b3c1d4d78b810e16a3a836/server.jar"
 
 # Accept EULA
-echo "[*] Accepting EULA..."
+echo "[3/3] Accepting EULA..."
 echo "eula=true" > eula.txt
 
-# Worlds directory
-mkdir -p worlds
-
-echo "[*] Installation complete!"
-echo "Run your server with:"
-echo "java -Xmx1G -Xms1G -jar $SERVER_JAR nogui"
+echo "=== Installation Complete! ==="
+echo "Run ./start.sh to start your server."
