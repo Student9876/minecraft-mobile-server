@@ -1,22 +1,30 @@
 #!/data/data/com.termux/files/usr/bin/bash
-
-# Exit on error
 set -e
 
-echo "[1/5] Updating packages..."
-pkg update -y
-pkg upgrade -y
+echo "[*] Updating packages..."
+apt update -y && apt upgrade -y
 
-echo "[2/5] Installing dependencies..."
-pkg install openjdk-17 wget unzip -y
+echo "[*] Installing dependencies..."
+apt install -y openjdk-21 wget unzip
 
-echo "[3/5] Creating folders..."
-mkdir -p server worlds
+# Create project folder
+mkdir -p ~/mc-server
+cd ~/mc-server
 
-echo "[4/5] Downloading Minecraft 1.21.1 server.jar..."
-wget -O server/server.jar https://piston-data.mojang.com/v1/objects/4ef9e8c9cc58d53c5ccf0c4f08b28a4db4a73ab8/server.jar
+# Download Vanilla 1.21.1 server jar
+SERVER_JAR="server.jar"
+if [ ! -f "$SERVER_JAR" ]; then
+    echo "[*] Downloading Minecraft Vanilla 1.21.1..."
+    wget -O "$SERVER_JAR" https://piston-data.mojang.com/v1/objects/ea1e2d342774e6a8f3e3f3af18e8a50182c5cc75/server.jar
+fi
 
-echo "[5/5] Accepting EULA..."
-echo "eula=true" > server/eula.txt
+# Accept EULA
+echo "[*] Accepting EULA..."
+echo "eula=true" > eula.txt
 
-echo "✅ Installation complete! Use ./start.sh to run your server."
+# Worlds directory
+mkdir -p worlds
+
+echo "[*] Installation complete!"
+echo "You can now run the server with:"
+echo "java -Xmx1G -Xms1G -jar $SERVER_JAR nogui"
