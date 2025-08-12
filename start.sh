@@ -1,45 +1,45 @@
 #!/bin/bash
 
-# ===== CONFIG =====
+# ==============================
+#  Minecraft Server + Playit
+#  Vanilla 1.21.1 - Single Terminal
+# ==============================
+
 JAR_FILE="server.jar"
 WORLD_DIR="world"
-JAVA_CMD="java -Xmx1G -Xms1G -jar $JAR_FILE nogui"
-# ===================
+PLAYIT_CONFIG="playit.toml"
 
-echo "==== Minecraft Server Starter ===="
-echo "1) Use existing world"
-echo "2) Create new world"
-read -p "Select an option [1/2]: " choice
-
-if [ "$choice" == "2" ]; then
-    echo "[INFO] Creating new world..."
-    rm -rf "$WORLD_DIR"
-    mkdir "$WORLD_DIR"
-    echo "[INFO] World folder reset. A new world will be generated on first start."
-fi
-
-# Accept EULA automatically
-if [ ! -f eula.txt ]; then
-    echo "[INFO] Accepting EULA..."
-    echo "eula=true" > eula.txt
-fi
-
-# Check server jar exists
+# Check for server.jar
 if [ ! -f "$JAR_FILE" ]; then
-    echo "[ERROR] $JAR_FILE not found!"
+    echo "[ERROR] $JAR_FILE not found! Please place it in the repo folder."
     exit 1
 fi
 
-# Start Playit
+# Check for world folder
+if [ ! -d "$WORLD_DIR" ]; then
+    echo "[WARNING] World folder not found. A new world will be created."
+fi
+
+# Check for playit config
+if [ ! -f "$PLAYIT_CONFIG" ]; then
+    echo "[ERROR] $PLAYIT_CONFIG not found! Please add your Playit config."
+    echo "You can download it from https://playit.gg/account/settings"
+    exit 1
+fi
+
+# Start Playit in background
 echo "[INFO] Starting Playit tunnel..."
-playit &
+playit --config "$PLAYIT_CONFIG" &
 PLAYIT_PID=$!
+
+# Wait a moment to ensure tunnel starts
 sleep 3
+echo "[INFO] Playit started (PID: $PLAYIT_PID)"
 
 # Start Minecraft server
 echo "[INFO] Starting Minecraft server..."
-$JAVA_CMD
+java -Xmx1024M -Xms1024M -jar "$JAR_FILE" nogui
 
-# Stop Playit after Minecraft server stops
-echo "[INFO] Stopping Playit tunnel..."
-kill $PLAYIT_PID 2>/dev/null
+# Stop Playit after server stops
+echo "[INFO] Stopping Playit..."
+kill $PLAYIT_PID
