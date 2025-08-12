@@ -30,15 +30,16 @@ if [ ! -f "$JAR_FILE" ]; then
     exit 1
 fi
 
-# Start playit in a new Termux session
-echo "[INFO] Starting Playit tunnel in new Termux session..."
-termux-session create -n "PlayitTunnel" "playit" &
-sleep 2
+# Start Playit
+echo "[INFO] Starting Playit tunnel..."
+playit &
+PLAYIT_PID=$!
+sleep 3
 
-# Start Minecraft server in another new Termux session
-echo "[INFO] Starting Minecraft server in new Termux session..."
-termux-session create -n "MinecraftServer" "$JAVA_CMD" &
-sleep 2
+# Start Minecraft server
+echo "[INFO] Starting Minecraft server..."
+$JAVA_CMD
 
-echo "[SUCCESS] Both Playit and Minecraft server are running in separate Termux sessions."
-echo "You can switch sessions using Termux's session menu."
+# Stop Playit after Minecraft server stops
+echo "[INFO] Stopping Playit tunnel..."
+kill $PLAYIT_PID 2>/dev/null
