@@ -1,15 +1,15 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 set -e
 
 echo "[*] Updating packages..."
 apt update -y && apt upgrade -y
 
 echo "[*] Installing dependencies..."
-apt install -y openjdk-21 wget unzip
+apt install -y openjdk-21-jdk wget unzip screen
 
 # Create project folder
-mkdir -p ~/mc-server
-cd ~/mc-server
+mkdir -p /root/mc-server
+cd /root/mc-server
 
 # Download Vanilla 1.21.1 server jar
 SERVER_JAR="server.jar"
@@ -26,5 +26,5 @@ echo "eula=true" > eula.txt
 mkdir -p worlds
 
 echo "[*] Installation complete!"
-echo "You can now run the server with:"
+echo "Run your server with:"
 echo "java -Xmx1G -Xms1G -jar $SERVER_JAR nogui"
