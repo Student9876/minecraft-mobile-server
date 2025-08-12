@@ -1,42 +1,44 @@
 #!/bin/bash
 
-set -e
-
+# ===== CONFIG =====
 JAR_FILE="server.jar"
-WORLD_DIR="worlds"
+WORLD_DIR="world"
+JAVA_CMD="java -Xmx1G -Xms1G -jar $JAR_FILE nogui"
+# ===================
 
-echo "=== Minecraft Server Launcher ==="
-echo "1) Load existing world"
+echo "==== Minecraft Server Starter ===="
+echo "1) Use existing world"
 echo "2) Create new world"
-echo "3) Exit"
-read -p "Choose an option: " choice
+read -p "Select an option [1/2]: " choice
 
-case "$choice" in
-    1)
-        if [ ! -d "$WORLD_DIR" ]; then
-            echo "No existing world found! Please create one first."
-            exit 1
-        fi
-        echo "Starting server with existing world..."
-        java -Xmx1024M -Xms1024M -jar "$JAR_FILE" nogui
-        ;;
-    2)
-        read -p "Enter new world name: " new_world
-        if [ -z "$new_world" ]; then
-            echo "World name cannot be empty!"
-            exit 1
-        fi
-        echo "Creating new world '$new_world'..."
-        rm -rf "$WORLD_DIR"
-        mkdir "$WORLD_DIR"
-        java -Xmx1024M -Xms1024M -jar "$JAR_FILE" nogui
-        ;;
-    3)
-        echo "Exiting."
-        exit 0
-        ;;
-    *)
-        echo "Invalid choice."
-        exit 1
-        ;;
-esac
+if [ "$choice" == "2" ]; then
+    echo "[INFO] Creating new world..."
+    rm -rf "$WORLD_DIR"
+    mkdir "$WORLD_DIR"
+    echo "[INFO] World folder reset. A new world will be generated on first start."
+fi
+
+# Accept EULA automatically
+if [ ! -f eula.txt ]; then
+    echo "[INFO] Accepting EULA..."
+    echo "eula=true" > eula.txt
+fi
+
+# Check server jar exists
+if [ ! -f "$JAR_FILE" ]; then
+    echo "[ERROR] $JAR_FILE not found!"
+    exit 1
+fi
+
+# Start playit in a new Termux session
+echo "[INFO] Starting Playit tunnel in new Termux session..."
+termux-session create -n "PlayitTunnel" "playit" &
+sleep 2
+
+# Start Minecraft server in another new Termux session
+echo "[INFO] Starting Minecraft server in new Termux session..."
+termux-session create -n "MinecraftServer" "$JAVA_CMD" &
+sleep 2
+
+echo "[SUCCESS] Both Playit and Minecraft server are running in separate Termux sessions."
+echo "You can switch sessions using Termux's session menu."
